@@ -1,6 +1,6 @@
 # Tugas Pemrograman 3
 
-> KNN Algorith
+> KNN Algorithm
 
 ---
 
