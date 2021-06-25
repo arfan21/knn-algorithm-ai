@@ -70,6 +70,7 @@ class KNN():
 
     def distances(self):
         """Get all distance"""
+
         return {
             "Euclidean": self.euclidean(),
             "Manhattan": self.manhattan(),
@@ -79,10 +80,12 @@ class KNN():
 
     def printDistance(self):
         """Pretty Print all distance"""
+
         print(json.dumps(self.distances(), sort_keys=False, indent=4))
 
     def getBestData(self, k=3):
         """Mendapatkan data 3 terbaik dari setiap metode perhitungan jarak"""
+
         bestEuclidean = sorted(self.euclidean(), key=lambda x: x["Result"])[:k]
         bestManhattan = sorted(self.manhattan(), key=lambda x: x["Result"])[:k]
         bestMinkowski = sorted(self.minkowski(), key=lambda x: x["Result"])[:k]
@@ -106,6 +109,7 @@ class KNN():
 
     def printBestData(self):
         """Pretty Print best data each method"""
+
         print(json.dumps(self.getBestData(), sort_keys=False, indent=4))
 
 
