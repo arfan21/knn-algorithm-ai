@@ -109,9 +109,6 @@ class KNN():
         print(json.dumps(self.getBestData(), sort_keys=False, indent=4))
 
 
-data = pd.read_excel("./mobil.xls")
-
-
 def createTestData():
     ukuran = 1
     kenyamanan = 1
@@ -137,6 +134,8 @@ def normalisasi(dataframe, maxRange=10):
     return coppiedDataframe
 
 
+data = pd.read_excel("./mobil.xls")
+
 normalizedData = normalisasi(data)
 testData = createTestData()
 knn = KNN(normalizedData, testData)
@@ -145,12 +144,3 @@ knn.printBestData()
 
 recommendedData = pd.DataFrame(knn.getBestData())
 recommendedData.to_excel('rekomendasi.xlsx', index=False)
-
-
-# print(testData)
-# print(data.iloc[1].values.tolist())
-# Train Data = Data yang digunakan untuk membuat suatu model
-# Test Data = Data yang digunakan untuk melakukan test terhadap suatu model/ yang akan mengeluarkan output (dalam kasus ini rekomendasi mobil)
-
-# jadi training adalah data yang seharusnya keluar misalkan kalau anda belajar 3 jam keluar nilai 60, kalau 2 jam keluar nilai 40, kalau 5 jam keluar nilai 100
-# walaupun actualnya tidak seperti itu
