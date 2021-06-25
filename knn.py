@@ -3,12 +3,12 @@ import numpy as np
 import json
 
 
-class KNN():
-    def __init__(self, data, testData):
+class KNN():    # Membuat class KNN yang berisi method untuk menghitung jarak, mendapatkan data terbaik, dan print data
+    def __init__(self, data, testData): #Method untuk menginisialisasi isi dari class KNN
         self.data = data
         self.testData = testData
 
-    def euclidean(self):
+    def euclidean(self):    #Method untuk menghitung jarak Euclidean
         self.resultEuclidean = []
         for _, series in self.data.iterrows():
             resultRow = 0
@@ -23,7 +23,7 @@ class KNN():
                 {"Nama Mobil": series["Nama Mobil"], "Result": resultRow**(1/2)})
         return self.resultEuclidean
 
-    def manhattan(self):
+    def manhattan(self):    #Method untuk menghitung jarak Manhattan
         self.resultManhattan = []
         for _, series in self.data.iterrows():
             resultRow = 0
@@ -38,7 +38,7 @@ class KNN():
                 {"Nama Mobil": series["Nama Mobil"], "Result": resultRow})
         return self.resultManhattan
 
-    def minkowski(self, h=3):
+    def minkowski(self, h=3):    #Method untuk menghitung jarak Minkowski dengan h default adalah 3
         self.resultMinkowski = []
         for _, series in self.data.iterrows():
             resultRow = 0
@@ -53,7 +53,7 @@ class KNN():
                 {"Nama Mobil": series["Nama Mobil"], "Result": resultRow**(h)})
         return self.resultMinkowski
 
-    def supremum(self):
+    def supremum(self):    #Method untuk menghitung jarak Supremum
         self.resultSupremum = []
         for _, series in self.data.iterrows():
             resultRow = []
@@ -72,25 +72,27 @@ class KNN():
         """Get all distance"""
 
         return {
-            "Euclidean": self.euclidean(),
-            "Manhattan": self.manhattan(),
-            "Minkowski": self.minkowski(),
-            "Supremum": self.supremum(),
+            "Euclidean": self.euclidean(),  #Mengembalikan jarak euclidean
+            "Manhattan": self.manhattan(),  #Mengembalikan jarak manhattan
+            "Minkowski": self.minkowski(),  #Mengembalikan jarak minkowski
+            "Supremum": self.supremum(),    #Mengembalikan jarak supremum
         }
 
-    def printDistance(self):
+    def printDistance(self):    #Method untuk print semua jarak
         """Pretty Print all distance"""
 
         print(json.dumps(self.distances(), sort_keys=False, indent=4))
 
-    def getBestData(self, k=3):
-        """Mendapatkan data 3 terbaik dari setiap metode perhitungan jarak"""
-
-        bestEuclidean = sorted(self.euclidean(), key=lambda x: x["Result"])[:k]
+    def getBestData(self, k=3): #Method untuk mendapatkan data terbaik dari setiap metode perhitungan jarak dengan k default adalah 3
+        """Mendapatkan data terbaik dari setiap metode perhitungan jarak"""
+        
+        #Melakukan sorting terhadap data jarak secara ascending
+        bestEuclidean = sorted(self.euclidean(), key=lambda x: x["Result"])[:k] 
         bestManhattan = sorted(self.manhattan(), key=lambda x: x["Result"])[:k]
         bestMinkowski = sorted(self.minkowski(), key=lambda x: x["Result"])[:k]
         bestSupremum = sorted(self.supremum(), key=lambda x: x["Result"])[:k]
 
+        #Menambahkan data terbaik kedalam satu array data terbaik
         data = []
         for i in range(k):
             data.append(
@@ -107,13 +109,13 @@ class KNN():
 
         return data
 
-    def printBestData(self):
+    def printBestData(self):    #Method untuk print data terbaik
         """Pretty Print best data each method"""
 
         print(json.dumps(self.getBestData(), sort_keys=False, indent=4))
 
 
-def createTestData():
+def createTestData():   #Fungsi untuk membuat data tes
     ukuran = 1
     kenyamanan = 1
     irit = 1
@@ -126,7 +128,7 @@ def createTestData():
     return pd.DataFrame(data)
 
 
-def normalisasi(dataframe, maxRange=10):
+def normalisasi(dataframe, maxRange=10):    #Fungsi untuk melakukan normalisasi terhadap data training
     coppiedDataframe = dataframe.copy()
     for col in coppiedDataframe.columns:
         if not coppiedDataframe[col].dtype == "int64" and not coppiedDataframe[col].dtype == "float64":
@@ -138,13 +140,13 @@ def normalisasi(dataframe, maxRange=10):
     return coppiedDataframe
 
 
-data = pd.read_excel("./mobil.xls")
+data = pd.read_excel("./mobil.xls") #Membaca file excel mobil.xls
 
-normalizedData = normalisasi(data)
-testData = createTestData()
-knn = KNN(normalizedData, testData)
-knn.getBestData()
-knn.printBestData()
+normalizedData = normalisasi(data)  #Melakukan normalisasi data training dari mobil.xls
+testData = createTestData()         #Membuat data tes
+knn = KNN(normalizedData, testData) #Melakukan inisialisasi class knn
+knn.getBestData()                   #Mendapatkan data terbaik
+knn.printBestData()                 #Print data terbaik
 
-recommendedData = pd.DataFrame(knn.getBestData())
-recommendedData.to_excel('rekomendasi.xlsx', index=False)
+recommendedData = pd.DataFrame(knn.getBestData())   #Menyimpan data terbaik pada dataframe
+recommendedData.to_excel('rekomendasi.xlsx', index=False)   #Menyimpan dataframe data terbaik menjadi file rekomendasi.xlsx
